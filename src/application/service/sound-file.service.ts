@@ -4,11 +4,20 @@ import {
   SoundFileUploadCommand,
   SoundFileUploadResult,
 } from '../port/in/sound-file.service.interface';
+import { SoundFileRepository } from '../port/out/repository/sound-file.repository.interface';
 
 @Injectable()
 export class SoundFileServiceImpl implements SoundFileService {
+  constructor(private readonly soundFileRepository: SoundFileRepository) {}
+
   upload(command: SoundFileUploadCommand): Promise<SoundFileUploadResult> {
     const { userId, soundFile, fileName, fileSize, duration } = command;
-    // throw new Error("Method not implemented.");
+    const newSoundFile = new SoundFile(
+      userId,
+      soundFile,
+      fileName,
+      fileSize,
+      duration,
+    );
   }
 }
