@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import jwt from 'jsonwebtoken';
-import { CustomLogger } from '../../../application/port/out/custom-logger';
 import { ConfigManager } from '../../../common/config/config-manager';
 import { RequestContextService } from '../context/request-context.service';
+import { CustomLogger } from '../logger/custom-logger';
 import { Logger } from '../logger/logger.module';
 import { UserLevel } from './type';
 
@@ -40,12 +40,18 @@ export class AccessGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest();
     const authString = request.headers.authorization;
-    const jwtString = authString.split('Bearer ')[1];
-    const jwtSecret = this.configManager.getConfig().jwt.secret;
-    const payload = jwt.verify(jwtString, jwtSecret) as jwt.JwtPayload;
-    const userId = payload.userId;
-    this.requestContextService.setUserId(userId);
-    // TODO. userId 필드가 존재하는지 확인
+    if (authString && authString.includes('Bearer')) {
+      const jwtString = authString.split('Bearer ')[1];
+      const jwtSecret = this.configManager.getConfig().jwt.secret;
+      const payload = jwt.verify(jwtString, jwtSecret) as jwt.JwtPayload;
+      const userId = payload.userId;
+      this.requestContextService.setUserId(userId);
+      request.user = {
+        id: userId,
+      };
+      // TODO. userId 필드가 존재하는지 확인
+      return true;
+    }
     return true;
   }
 }

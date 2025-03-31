@@ -1,6 +1,6 @@
-import { CustomLogger } from '../../../application/port/out/custom-logger';
 import { ConfigManager } from '../../../common/config/config-manager';
 import { RequestContextService } from '../context/request-context.service';
+import { CustomLogger } from './custom-logger';
 
 export class CustomLoggerConsole implements CustomLogger {
   constructor(

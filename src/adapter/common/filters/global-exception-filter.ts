@@ -3,18 +3,21 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
+  Inject,
 } from '@nestjs/common';
-import { CustomLogger } from '../../../application/port/out/custom-logger';
 import {
   BadRequestError,
   CustomError,
   ServerError,
 } from '../../../common/error/custom-error';
+import { CustomLogger } from '../logger/custom-logger';
+import { Logger } from '../logger/logger.module';
+import { StatusCode } from '../type/status-code';
 
 // 여기에서는 절대 에러 발생하면 안 됨
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
-  constructor(private readonly logger: CustomLogger) {}
+  constructor(@Inject(Logger) private readonly logger: CustomLogger) {}
 
   catch(e: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -38,7 +41,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       });
     } else {
       // 예측하지 못한 에러
-      return res.status(500).json({
+      return res.status(StatusCode.INTERNAL_SERVER_ERROR).json({
         error: {
           name: 'UNEXPECTED_ERROR',
           message: e.message,
@@ -50,8 +53,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
 function getStatusCode(e: Error) {
   if (e instanceof BadRequestError) {
-    return 400;
+    return StatusCode.BAD_REQUEST;
   } else if (e instanceof ServerError) {
-    return 500;
+    return StatusCode.INTERNAL_SERVER_ERROR;
   }
 }
