@@ -1,9 +1,13 @@
 import { Entity } from '../base.entity';
+import { Id } from '../type';
 
 export class SoundFile extends Entity {
   constructor(
-    id: number,
+    id: Id,
     private readonly userId: number,
+    private readonly fileName: string,
+    private readonly fileSize: number,
+    private readonly duration: number,
     private readonly filePath: string,
     private readonly previewLink: string,
     private readonly createdAt: Date,
@@ -15,6 +19,9 @@ export class SoundFile extends Entity {
     return {
       id: this.getId(),
       userId: this.userId,
+      fileName: this.fileName,
+      fileSize: this.fileSize,
+      duration: this.duration,
       filePath: this.filePath,
       previewLink: this.previewLink,
       createdAt: this.createdAt,

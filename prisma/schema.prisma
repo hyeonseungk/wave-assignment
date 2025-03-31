@@ -19,9 +19,11 @@ model User {
   nickname   String      @unique
   grade      UserGrade
   soundFiles SoundFile[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime? @updatedAt
-  deletedAt DateTime?
+  StsJob     StsJob[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime?   @updatedAt
+  deletedAt  DateTime?
+
 }
 
 enum UserGrade {
@@ -30,43 +32,53 @@ enum UserGrade {
 }
 
 model SoundFile {
-  id          Int        @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
+  fileName    String
+  fileSize    Int
+  duration    Int
   filePath    String
   previewLink String
-  user        User       @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
   userId      Int
-  VoiceJob    VoiceJob[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime?   @updatedAt
+  StsJob      StsJob[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
 }
 
 model Voice {
-  id          Int        @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
   explanation String
   link        String
-  VoiceJob    VoiceJob[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime?   @updatedAt
+  StsJob      StsJob[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
 }
 
-model VoiceJob {
-  soundFile   SoundFile      @relation(fields: [soundFileId], references: [id])
+model StsJob {
+  user        User         @relation(fields: [userId], references: [id])
+  userId      Int
+  soundFile   SoundFile    @relation(fields: [soundFileId], references: [id])
   soundFileId Int
-  voice       Voice          @relation(fields: [voiceId], references: [id])
+  voice       Voice        @relation(fields: [voiceId], references: [id])
   voiceId     Int
-  status      VoiceJobStatus
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime?       @updatedAt
+  status      StsJobStatus
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime?    @updatedAt
   deletedAt   DateTime?
+  resultFilePath  String
+  resultFileSize  Int
+  resultFileDuration  Int
+  resultFilePreviewLink  String 
+
   @@id([soundFileId, voiceId])
 }
 
-enum VoiceJobStatus {
-  CREATED
-  BEING_PROCESSCED
+enum StsJobStatus {
+  PENDING
+  PROCESSING
   COMPLETED
   FAILED
   CANCELLED
