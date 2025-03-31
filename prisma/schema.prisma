@@ -15,24 +15,18 @@ datasource db {
 
 model User {
   id         Int         @id @default(autoincrement())
-  grade      UserGrade   @relation(fields: [gradeId], references: [id])
-  gradeId    Int
   email      String      @unique
-  nickname   String
+  nickname   String      @unique
+  grade      UserGrade
   soundFiles SoundFile[]
-
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
 }
 
-model UserGrade {
-  id          Int      @id @default(autoincrement())
-  explanation String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  deletedAt   DateTime
-  User        User[]
+enum UserGrade {
+  FREE
+  PREMIUM
 }
 
 model SoundFile {
@@ -43,18 +37,19 @@ model SoundFile {
   userId      Int
   VoiceJob    VoiceJob[]
   createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  deletedAt   DateTime
+  updatedAt   DateTime?   @updatedAt
+  deletedAt   DateTime?
 }
 
 model Voice {
   id          Int        @id @default(autoincrement())
+  name        String
   explanation String
   link        String
   VoiceJob    VoiceJob[]
   createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  deletedAt   DateTime
+  updatedAt   DateTime?   @updatedAt
+  deletedAt   DateTime?
 }
 
 model VoiceJob {
@@ -64,8 +59,8 @@ model VoiceJob {
   voiceId     Int
   status      VoiceJobStatus
   createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  deletedAt   DateTime
+  updatedAt   DateTime?       @updatedAt
+  deletedAt   DateTime?
   @@id([soundFileId, voiceId])
 }
 
