@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int         @id @default(autoincrement())
+  grade      UserGrade   @relation(fields: [gradeId], references: [id])
+  gradeId    Int
+  email      String      @unique
+  nickname   String
+  soundFiles SoundFile[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime
+}
+
+model UserGrade {
+  id          Int      @id @default(autoincrement())
+  explanation String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime
+  User        User[]
+}
+
+model SoundFile {
+  id          Int        @id @default(autoincrement())
+  filePath    String
+  previewLink String
+  user        User       @relation(fields: [userId], references: [id])
+  userId      Int
+  VoiceJob    VoiceJob[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime
+}
+
+model Voice {
+  id          Int        @id @default(autoincrement())
+  explanation String
+  link        String
+  VoiceJob    VoiceJob[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime
+}
+
+model VoiceJob {
+  soundFile   SoundFile      @relation(fields: [soundFileId], references: [id])
+  soundFileId Int
+  voice       Voice          @relation(fields: [voiceId], references: [id])
+  voiceId     Int
+  status      VoiceJobStatus
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  deletedAt   DateTime
+  @@id([soundFileId, voiceId])
+}
+
+enum VoiceJobStatus {
+  CREATED
+  BEING_PROCESSCED
+  COMPLETED
+  FAILED
+  CANCELLED
+}

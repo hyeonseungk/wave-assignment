@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: volly-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: volly
+      MYSQL_USER: wavedeck
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: 
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - volly-network
+
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: volly-app
+  #   restart: always
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - DATABASE_HOST=db
+  #     - DATABASE_PORT=3306
+  #     - DATABASE_USER=wavedeck
+  #     - DATABASE_PASSWORD=1234
+  #     - DATABASE_NAME=volly
+  #     - NODE_ENV=development
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   networks:
+  #     - volly-network
+
+networks:
+  volly-network:
+    driver: bridge
+
+volumes:
+  mysql_data:  # 첫 번째 DB 볼륨 정의
