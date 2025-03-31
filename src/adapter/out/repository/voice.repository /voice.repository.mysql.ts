@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { VoiceRepository } from '../../../../application/port/out/repository/voice.repository.interface';
 import { Id } from '../../../../domain/entity/type';
 import {
@@ -7,6 +8,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { VoiceMapper } from './voice.mapper';
 
+@Injectable()
 export class VoiceRepositoryMysql implements VoiceRepository {
   constructor(
     private readonly prisma: PrismaService,
@@ -24,7 +26,7 @@ export class VoiceRepositoryMysql implements VoiceRepository {
     });
   }
 
-  async getOneById(id: Id): Promise<Voice | null> {
+  async findOneById(id: Id): Promise<Voice | null> {
     const voice = await this.prisma.voice.findUnique({
       where: { id },
     });

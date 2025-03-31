@@ -41,6 +41,8 @@ export enum OutAdapter {
     },
     StsJobMapper,
   ],
-  exports: [],
+  exports: Object.values(OutAdapter).filter(
+    (value) => typeof value === 'string',
+  ),
 })
 export class OutAdpaterModule {}

@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import dotenv from 'dotenv';
 import { Config, Env } from './type';
 
 @Injectable()
 export class ConfigManager {
-  private config: Config;
+  private config: Config = {};
   private env: Env;
   constructor() {
     this.env = process.env.NODE_ENV as Env;
@@ -12,7 +11,6 @@ export class ConfigManager {
 
   async initialize() {
     if (this.env === Env.LOCAL) {
-      dotenv.config({ path: '.env.local' });
       this.config.db = {
         host: process.env.DB_HOST,
         port: parseInt(process.env.DB_PORT),

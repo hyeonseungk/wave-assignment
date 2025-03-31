@@ -6,5 +6,5 @@ import {
 
 export interface VoiceRepository {
   createOne(input: VoiceCreateInput): Promise<void>;
-  getOneById(id: Id): Promise<Voice | null>;
+  findOneById(id: Id): Promise<Voice | null>;
 }

@@ -6,5 +6,5 @@ import { Id } from '../../../../domain/entity/type';
 
 export interface SoundFileRepository {
   createOne(input: SoundFileCreateInput): Promise<void>;
-  getOneById(id: Id): Promise<SoundFile | null>;
+  findOneById(id: Id): Promise<SoundFile | null>;
 }

@@ -1,10 +1,12 @@
-export interface SoundFileService {
+import { Id } from '../../../domain/entity/type';
+
+export interface SoundFileSvc {
   upload(command: SoundFileUploadCommand): Promise<SoundFileUploadResult>;
 }
 
 export class SoundFileUploadCommand {
   constructor(
-    public readonly userId: string,
+    public readonly userId: Id,
     public readonly soundFile: Express.Multer.File,
     public readonly fileName: string,
     public readonly fileSize: number,
@@ -14,7 +16,7 @@ export class SoundFileUploadCommand {
 
 export class SoundFileUploadResult {
   constructor(
-    public readonly fileId: string,
+    public readonly fileId: Id,
     public readonly filePreviewUrl: string,
     public readonly uploadTime: string,
   ) {}

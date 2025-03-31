@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { StsJobRepository } from '../../../../application/port/out/repository/sts-job.repository.interface';
 import {
   StsJob,
@@ -7,6 +8,7 @@ import { Id } from '../../../../domain/entity/type';
 import { PrismaService } from '../prisma/prisma.service';
 import { StsJobMapper } from './sts-job.mapper';
 
+@Injectable()
 export class StsJobRepositoryMysql implements StsJobRepository {
   constructor(
     private readonly prisma: PrismaService,
@@ -40,7 +42,7 @@ export class StsJobRepositoryMysql implements StsJobRepository {
     });
   }
 
-  async getOneById(id: Id): Promise<StsJob | null> {
+  async findOneById(id: Id): Promise<StsJob | null> {
     const stsJob = await this.prisma.stsJob.findUnique({
       where: { id },
     });

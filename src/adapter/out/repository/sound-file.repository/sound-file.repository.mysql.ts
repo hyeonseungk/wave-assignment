@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { SoundFileRepository } from '../../../../application/port/out/repository/sound-file.repository.interface';
 import {
   SoundFile,
@@ -7,6 +8,7 @@ import { Id } from '../../../../domain/entity/type';
 import { PrismaService } from '../prisma/prisma.service';
 import { SoundFileMapper } from './sound-file.mapper';
 
+@Injectable()
 export class SoundFileRepositoryMysql implements SoundFileRepository {
   constructor(
     private readonly prisma: PrismaService,
@@ -28,7 +30,7 @@ export class SoundFileRepositoryMysql implements SoundFileRepository {
     });
   }
 
-  async getOneById(id: Id): Promise<SoundFile | null> {
+  async findOneById(id: Id): Promise<SoundFile | null> {
     const soundFile = await this.prisma.soundFile.findUnique({
       where: { id },
     });

@@ -29,6 +29,7 @@ export class User extends Entity {
 
 export type UserCreateInput = {
   email: string;
+  password: string;
   nickname: string;
   grade: UserGrade;
 };

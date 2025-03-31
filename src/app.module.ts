@@ -8,6 +8,7 @@ import { RequestContextInterceptor } from './adapter/common/interceptors/request
 import { LoggerModule } from './adapter/common/logger/logger.module';
 import { RequestContextMiddleware } from './adapter/common/middleware/request-context.middleware';
 import { GlobalValidationPipe } from './adapter/common/pipe/global-validation-pipe';
+import { LoginController } from './adapter/in/controllers/login/login.controller';
 import { SoundFileController } from './adapter/in/controllers/sound-file/sound-file.controller';
 import { ApplicationModule } from './application/applicatioin.module';
 import { ConfigModule } from './common/config/config.module';
@@ -18,7 +19,7 @@ import { ConfigModule } from './common/config/config.module';
     LoggerModule,
     ApplicationModule,
   ],
-  controllers: [SoundFileController],
+  controllers: [SoundFileController, LoginController],
   providers: [
     RequestContextService,
     {

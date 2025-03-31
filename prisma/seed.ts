@@ -1,4 +1,5 @@
 import { PrismaClient, UserGrade } from '@prisma/client';
+import { hashPassword } from '../src/application/util/hash';
 
 const prisma = new PrismaClient({
   datasources: {
@@ -9,13 +10,14 @@ const prisma = new PrismaClient({
 });
 
 async function main() {
-  // await prisma.$connect();
+  await prisma.$connect();
   // 회원 생성
   const user1 = {
     id: 1,
     email: 'alice@test.com',
     nickname: 'alice',
     grade: UserGrade.FREE,
+    password: await hashPassword('1234'),
     createdAt: new Date(),
     updatedAt: null,
     deletedAt: null,
@@ -25,6 +27,7 @@ async function main() {
     email: 'michael@test.com',
     nickname: 'michael',
     grade: UserGrade.PREMIUM,
+    password: await hashPassword('9999'),
     createdAt: new Date(),
     updatedAt: null,
     deletedAt: null,

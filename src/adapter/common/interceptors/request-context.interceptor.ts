@@ -6,7 +6,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { RequestContextService } from '../context/request-context.service';
 
 @Injectable()
@@ -27,22 +27,27 @@ export class RequestContextInterceptor implements NestInterceptor {
     const now = Date.now();
 
     return next.handle().pipe(
-      tap({
-        next: (data) => {
-          // 요청 완료 로깅
-          this.logger.log(
-            `[${requestId}] Request completed in ${Date.now() - now}ms`,
-          );
-          return { data: data || {} };
-        },
-        error: (error) => {
-          // 에러 로깅
-          this.logger.error(
-            `[${requestId}] Request failed: ${error.message}`,
-            error.stack,
-          );
-        },
+      map((data) => {
+        this.logger.log(
+          `[${requestId}] Request completed in ${Date.now() - now}ms`,
+        );
+        return new ResponseWrapper(data || {});
+      }),
+      catchError((error) => {
+        this.logger.error(
+          `[${requestId}] Request failed: ${error.message}`,
+          error.stack,
+        );
+        throw error;
       }),
     );
+  }
+}
+
+class ResponseWrapper<T> {
+  data: T;
+
+  constructor(data: T) {
+    this.data = data;
   }
 }

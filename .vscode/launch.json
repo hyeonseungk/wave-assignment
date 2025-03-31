@@ -11,11 +11,13 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-				"NODE_ENV": "prd"
-			},
-      "program": "${workspaceFolder}/src/main.ts",
-      "preLaunchTask": "npm: build",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:local"],
+      // "env": {
+			// 	"NODE_ENV": "local"
+			// },
+      // "program": "${workspaceFolder}/src/main.ts",
+      // "preLaunchTask": "npm: build",
       "outFiles": [
         "${workspaceFolder}/dist/**/*.js"
       ],
