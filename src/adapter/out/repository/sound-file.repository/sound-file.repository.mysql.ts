@@ -1,5 +1,9 @@
 import { SoundFileRepository } from '../../../../application/port/out/repository/sound-file.repository.interface';
-import { SoundFile } from '../../../../domain/entity/sound-file.entity';
+import {
+  SoundFile,
+  SoundFileCreateInput,
+} from '../../../../domain/entity/sound-file.entity';
+import { Id } from '../../../../domain/entity/type';
 import { PrismaService } from '../prisma/prisma.service';
 import { SoundFileMapper } from './sound-file.mapper';
 
@@ -9,22 +13,22 @@ export class SoundFileRepositoryMysql implements SoundFileRepository {
     private readonly mapper: SoundFileMapper,
   ) {}
 
-  async createSoundFile(soundFile: SoundFile): Promise<void> {
-    const { id, userId, filePath, previewLink, createdAt } = soundFile.toDTO();
+  async createOne(input: SoundFileCreateInput): Promise<void> {
+    const { userId, fileName, fileSize, duration, filePath, previewLink } =
+      input;
     await this.prisma.soundFile.create({
       data: {
-        id,
         userId,
+        fileName,
+        fileSize,
+        duration,
         filePath,
         previewLink,
-        createdAt,
-        updatedAt: null,
-        deletedAt: null,
       },
     });
   }
 
-  async getSoundFileById(id: number): Promise<SoundFile> {
+  async getOneById(id: Id): Promise<SoundFile | null> {
     const soundFile = await this.prisma.soundFile.findUnique({
       where: { id },
     });

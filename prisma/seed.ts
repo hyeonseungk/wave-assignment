@@ -9,7 +9,7 @@ const prisma = new PrismaClient({
 });
 
 async function main() {
-  await prisma.$connect();
+  // await prisma.$connect();
   // 회원 생성
   const user1 = {
     id: 1,

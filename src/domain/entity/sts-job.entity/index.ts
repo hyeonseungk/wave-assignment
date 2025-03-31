@@ -35,3 +35,15 @@ export class StsJob extends Entity {
     };
   }
 }
+
+export type StsJobCreateInput = {
+  userId: Id;
+  soundFileId: Id;
+  voiceId: Id;
+  pitch: number;
+  status: StsJobStatus;
+  resultFilePath: string;
+  resultFileSize: number;
+  resultFileDuration: number;
+  resultFilePreviewLink: string;
+};

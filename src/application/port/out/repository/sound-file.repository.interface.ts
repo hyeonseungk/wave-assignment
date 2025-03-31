@@ -1,6 +1,10 @@
-import { SoundFile } from '../../../../domain/entity/sound-file.entity';
+import {
+  SoundFile,
+  SoundFileCreateInput,
+} from '../../../../domain/entity/sound-file.entity';
+import { Id } from '../../../../domain/entity/type';
 
 export interface SoundFileRepository {
-  createSoundFile(soundFile: SoundFile): Promise<void>;
-  getSoundFileById(id: number): Promise<SoundFile>;
+  createOne(input: SoundFileCreateInput): Promise<void>;
+  getOneById(id: Id): Promise<SoundFile | null>;
 }

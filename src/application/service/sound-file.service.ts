@@ -12,12 +12,5 @@ export class SoundFileServiceImpl implements SoundFileService {
 
   upload(command: SoundFileUploadCommand): Promise<SoundFileUploadResult> {
     const { userId, soundFile, fileName, fileSize, duration } = command;
-    const newSoundFile = new SoundFile(
-      userId,
-      soundFile,
-      fileName,
-      fileSize,
-      duration,
-    );
   }
 }

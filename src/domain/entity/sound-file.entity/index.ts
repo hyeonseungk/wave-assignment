@@ -28,3 +28,12 @@ export class SoundFile extends Entity {
     };
   }
 }
+
+export type SoundFileCreateInput = {
+  userId: number;
+  fileName: string;
+  fileSize: number;
+  duration: number;
+  filePath: string;
+  previewLink: string;
+};

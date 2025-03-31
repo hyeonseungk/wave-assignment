@@ -58,6 +58,7 @@ model Voice {
 }
 
 model StsJob {
+  id          Int       @id @default(autoincrement())
   user        User         @relation(fields: [userId], references: [id])
   userId      Int
   soundFile   SoundFile    @relation(fields: [soundFileId], references: [id])
@@ -68,12 +69,11 @@ model StsJob {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime?    @updatedAt
   deletedAt   DateTime?
+  pitch       Int
   resultFilePath  String
   resultFileSize  Int
   resultFileDuration  Int
   resultFilePreviewLink  String 
-
-  @@id([soundFileId, voiceId])
 }
 
 enum StsJobStatus {

@@ -20,3 +20,9 @@ export class Voice extends Entity {
     };
   }
 }
+
+export type VoiceCreateInput = {
+  name: string;
+  explanation: string;
+  link: string;
+};
