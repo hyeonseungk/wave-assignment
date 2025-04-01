@@ -7,7 +7,7 @@ export interface StsJobSvc {
 export class StsJobStartCommand {
   constructor(
     public readonly userId: Id,
-    public readonly fileId: Id,
+    public readonly soundFileId: Id,
     public readonly voiceId: Id,
     public readonly pitch: number,
     public readonly soundQuality: number,

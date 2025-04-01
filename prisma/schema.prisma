@@ -79,7 +79,7 @@ model StsJob {
 }
 
 enum StsJobStatus {
-  PENDING
+  QUEUED
   PROCESSING
   COMPLETED
   FAILED

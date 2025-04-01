@@ -15,7 +15,6 @@ import { UserId } from '../../../common/decorator/user-id.decorator';
 import { AccessControl } from '../../../common/guards/access-guard';
 import { UserLevel } from '../../../common/guards/type';
 import { DbTransactionInterceptor } from '../../../common/interceptors/db-transaction.interceptor';
-import { SoundFileDeleteRequestBody } from '../sound-file/dto/sound-file-delete.request.body';
 
 @Controller('/api/v1')
 @AccessControl(UserLevel.MEMBER)
@@ -27,7 +26,7 @@ export class SoundFileController {
 
   @Post('/sts')
   @UseInterceptors(DbTransactionInterceptor)
-  async delete(@UserId() userId: Id, @Body() body: SoundFileDeleteRequestBody) {
+  async delete(@UserId() userId: Id, @Body() body: StsJobRequestBody) {
     const { fileId } = body;
     const command = new SoundFileDeleteCommand(userId, fileId);
     return await this.soundFileService.delete(command);

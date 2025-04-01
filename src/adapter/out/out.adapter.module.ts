@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '../../common/config/config.module';
 import { RequestContextModule } from '../common/context/request-context.module';
+import { LoggerModule } from '../common/logger/logger.module';
+import { RetryableHttpClient } from './common/http-client/retryable-http-client';
 import { PreviewLinkGeneratorAwsS3 } from './etc/preview-link-generator/preview-link-generator.aws-s3';
+import { StsJobProcessorAi } from './etc/sts-job-processor/sts-job-processor.ai';
 import { PrismaModule } from './repository/prisma/prisma.module';
 import { SoundFileMapper } from './repository/sound-file.repository/sound-file.mapper';
 import { SoundFileRepositoryMysql } from './repository/sound-file.repository/sound-file.repository.mysql';
@@ -22,8 +25,9 @@ export enum OutAdapter {
 }
 
 @Module({
-  imports: [ConfigModule, PrismaModule, RequestContextModule],
+  imports: [ConfigModule, PrismaModule, RequestContextModule, LoggerModule],
   providers: [
+    RetryableHttpClient,
     {
       provide: OutAdapter.UserRepository,
       useClass: UserRepositoryMysql,
@@ -50,7 +54,7 @@ export enum OutAdapter {
     },
     {
       provide: OutAdapter.StsJobProcessor,
-      useClass: StsJobProcessor,
+      useClass: StsJobProcessorAi,
     },
   ],
   exports: Object.values(OutAdapter).filter(
