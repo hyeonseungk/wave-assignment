@@ -9,6 +9,7 @@ import {
   StsJobStartResult,
   StsJobSvc,
 } from '../port/in/sts-job.service.interface';
+import { PreviewLinkGenerator } from '../port/out/etc/preview-link-generator.interface';
 import { StsJobProcessor } from '../port/out/etc/sts-job-processor.interface';
 import { SoundFileRepository } from '../port/out/repository/sound-file.repository.interface';
 import { StsJobRepository } from '../port/out/repository/sts-job.repository.interface';
@@ -29,6 +30,8 @@ export class StsJobService implements StsJobSvc {
     private readonly stsJobRepository: StsJobRepository,
     @Inject(OutAdapter.StsJobProcessor)
     private readonly stsJobProcessor: StsJobProcessor,
+    @Inject(OutAdapter.PreviewLinkGenerator)
+    private readonly previewLinkGenerator: PreviewLinkGenerator,
   ) {}
 
   async start(command: StsJobStartCommand): Promise<StsJobStartResult> {
@@ -46,12 +49,17 @@ export class StsJobService implements StsJobSvc {
       throw new BadRequestError(ErrorMsg.VOICE_NOT_FOUND);
     }
     // TODO. user 등급, 권한 및 사용 가능한 보이스인지 등을 체크
-    const { originalPath, convertedPath, fileSize } =
+    const { convertedPath, fileSize, fileDuration } =
       await this.stsJobProcessor.process(
         soundFile.getFilePath(),
         voice.getId(),
         pitch,
         soundQuality,
+      );
+
+    const { previewLink } =
+      await this.previewLinkGenerator.generatePreviewLinkWithFilePath(
+        convertedPath,
       );
 
     const stsJob = await this.stsJobRepository.createOne({
@@ -61,8 +69,11 @@ export class StsJobService implements StsJobSvc {
       pitch,
       soundQuality,
       status: StsJobStatus.QUEUED,
-      originalPath,
-      convertedPath,
+      resultFilePath: convertedPath,
+      resultFileSize: fileSize,
+      resultFileDuration: fileDuration,
+      resultFilePreviewLink: previewLink,
     });
+    return new StsJobStartResult(stsJob.getId(), previewLink);
   }
 }

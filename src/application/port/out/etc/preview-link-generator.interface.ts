@@ -1,6 +1,5 @@
 export interface PreviewLinkGenerator {
-  generatePreviewLink(
-    file: { buffer: Buffer },
-    fileName: string,
+  generatePreviewLinkWithFilePath(
+    filePath: string,
   ): Promise<{ previewLink: string }>;
 }

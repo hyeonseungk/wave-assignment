@@ -16,8 +16,7 @@ export class StsJobStartCommand {
 
 export class StsJobStartResult {
   constructor(
-    public readonly originalPath: string,
-    public readonly convertedPath: string,
-    public readonly fileSize: number,
+    public readonly jobId: Id,
+    public readonly resultFilePreviewLink: string,
   ) {}
 }

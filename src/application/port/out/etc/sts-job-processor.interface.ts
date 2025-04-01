@@ -14,5 +14,4 @@ export type StsJobProcessResult = {
   convertedPath: string;
   fileSize: number;
   fileDuration: number;
-  filePreviewLink: string;
 };

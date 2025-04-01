@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import {
   StsJobProcessor,
   StsJobProcessResult,
@@ -11,10 +12,10 @@ type AiServerResponseBody = {
     convertedPath: string;
     fileSize: number;
     fileDuration: number;
-    filePreviewLink: string;
   };
 };
 
+@Injectable()
 export class StsJobProcessorAi implements StsJobProcessor {
   constructor(private readonly retryableHttpClient: RetryableHttpClient) {}
 
@@ -38,14 +39,9 @@ export class StsJobProcessorAi implements StsJobProcessor {
         },
       },
     );
+
     const {
-      data: {
-        originalPath,
-        convertedPath,
-        fileSize,
-        fileDuration,
-        filePreviewLink,
-      },
+      data: { originalPath, convertedPath, fileSize, fileDuration },
     } = response.body as AiServerResponseBody;
 
     return {
@@ -53,7 +49,6 @@ export class StsJobProcessorAi implements StsJobProcessor {
       convertedPath,
       fileSize,
       fileDuration,
-      filePreviewLink,
     };
   }
 }

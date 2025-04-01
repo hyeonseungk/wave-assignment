@@ -9,6 +9,7 @@ import { LoggerModule } from './adapter/common/logger/logger.module';
 import { GlobalValidationPipe } from './adapter/common/pipe/global-validation-pipe';
 import { LoginController } from './adapter/in/controllers/login/login.controller';
 import { SoundFileController } from './adapter/in/controllers/sound-file/sound-file.controller';
+import { StsJobController } from './adapter/in/controllers/sts-job/sts-job.controller';
 import { ApplicationModule } from './application/applicatioin.module';
 import { ConfigModule } from './common/config/config.module';
 @Module({
@@ -18,7 +19,7 @@ import { ConfigModule } from './common/config/config.module';
     LoggerModule,
     ApplicationModule,
   ],
-  controllers: [SoundFileController, LoginController],
+  controllers: [SoundFileController, LoginController, StsJobController],
   providers: [
     {
       provide: APP_GUARD,

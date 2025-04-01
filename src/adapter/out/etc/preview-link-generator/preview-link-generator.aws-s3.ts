@@ -8,13 +8,12 @@ export class PreviewLinkGeneratorAwsS3 implements PreviewLinkGenerator {
 
   constructor() {}
 
-  async generatePreviewLink(
-    file: { buffer: Buffer },
-    fileName: string,
+  async generatePreviewLinkWithFilePath(
+    filePath: string,
   ): Promise<{ previewLink: string }> {
     // TODO. aws client 로직을 굳이 구현하지는 않음
     return {
-      previewLink: path.join(this.baseUrl, fileName),
+      previewLink: path.join(this.baseUrl, filePath),
     };
   }
 }

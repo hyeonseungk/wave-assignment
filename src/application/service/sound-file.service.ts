@@ -33,10 +33,8 @@ export class SoundFileService implements SoundFileSvc {
       soundFile,
       this.generateFileName(fileName),
     );
-    const { previewLink } = await this.previewLinkGenerator.generatePreviewLink(
-      soundFile,
-      fileName,
-    );
+    const { previewLink } =
+      await this.previewLinkGenerator.generatePreviewLinkWithFilePath(filePath);
     const newSoundFile = await this.soundFileRepository.createOne({
       userId,
       fileName,
