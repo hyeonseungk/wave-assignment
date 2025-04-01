@@ -19,6 +19,7 @@ import { SOUND_UPLOAD_MAX_SIZE } from '../../../../domain/policy/sound.policy';
 import { UserId } from '../../../common/decorator/user-id.decorator';
 import { AccessControl } from '../../../common/guards/access-guard';
 import { UserLevel } from '../../../common/guards/type';
+import { DbTransactionInterceptor } from '../../../common/interceptors/db-transaction.interceptor';
 import { StatusCode } from '../../../common/type/status-code';
 import {
   SoundFileDeleteRequestBody,
@@ -33,8 +34,9 @@ export class SoundFileController {
     private readonly soundFileService: SoundFileSvc,
   ) {}
 
-  @Post('/common/audio/upload')
   @UseInterceptors(FileInterceptor('soundFile'))
+  @UseInterceptors(DbTransactionInterceptor)
+  @Post('/common/audio/upload')
   async uploadSound(
     @UserId() userId: Id,
     @UploadedFile(
@@ -61,6 +63,7 @@ export class SoundFileController {
   }
 
   @Post('/common/audio/delete')
+  @UseInterceptors(DbTransactionInterceptor)
   async login(@UserId() userId: Id, @Body() body: SoundFileDeleteRequestBody) {
     const { fileId } = body;
     const command = new SoundFileDeleteCommand(userId, fileId);

@@ -7,12 +7,23 @@ export class CustomLoggerConsole implements CustomLogger {
     private readonly configManager: ConfigManager,
     private readonly requestContextService: RequestContextService,
   ) {}
+  log(msg: string, context?: Record<string, any>): void {
+    console.info(msg, context);
+  }
 
-  error(error: Error, msg: string, context?: Record<string, any>): void {}
+  error(msg: string, context?: Record<string, any>): void {
+    console.error(msg, context);
+  }
 
-  warn(msg: string, context?: Record<string, any>): void {}
+  warn(msg: string, context?: Record<string, any>): void {
+    console.warn(msg, context);
+  }
 
-  info(msg: string, context?: Record<string, any>): void {}
+  info(msg: string, context?: Record<string, any>): void {
+    console.info(msg, context);
+  }
 
-  debug(msg: string, context?: Record<string, any>): void {}
+  debug(msg: string, context?: Record<string, any>): void {
+    console.debug(msg, context);
+  }
 }

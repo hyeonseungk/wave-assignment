@@ -45,7 +45,6 @@ export class AccessGuard implements CanActivate {
       const jwtSecret = this.configManager.getConfig().jwt.secret;
       const payload = jwt.verify(jwtString, jwtSecret) as jwt.JwtPayload;
       const userId = payload.userId;
-      this.requestContextService.setUserId(userId);
       request.user = {
         id: userId,
       };

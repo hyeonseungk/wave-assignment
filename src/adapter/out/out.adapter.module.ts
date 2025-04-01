@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '../../common/config/config.module';
+import { RequestContextModule } from '../common/context/request-context.module';
 import { PreviewLinkGeneratorAwsS3 } from './etc/preview-link-generator/preview-link-generator.aws-s3';
 import { PrismaModule } from './repository/prisma/prisma.module';
 import { SoundFileMapper } from './repository/sound-file.repository/sound-file.mapper';
@@ -20,7 +21,7 @@ export enum OutAdapter {
 }
 
 @Module({
-  imports: [ConfigModule, PrismaModule],
+  imports: [ConfigModule, PrismaModule, RequestContextModule],
   providers: [
     {
       provide: OutAdapter.UserRepository,

@@ -5,20 +5,29 @@ import {
   SoundFileCreateInput,
 } from '../../../../domain/entity/sound-file.entity';
 import { Id } from '../../../../domain/entity/type';
+import { RequestContextService } from '../../../common/context/request-context.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { RepositoryMySql } from '../prisma/repository.mysql';
 import { SoundFileMapper } from './sound-file.mapper';
 
 @Injectable()
-export class SoundFileRepositoryMysql implements SoundFileRepository {
+export class SoundFileRepositoryMysql
+  extends RepositoryMySql
+  implements SoundFileRepository
+{
   constructor(
-    private readonly prisma: PrismaService,
+    prisma: PrismaService,
+    requestContextService: RequestContextService,
     private readonly mapper: SoundFileMapper,
-  ) {}
+  ) {
+    super(prisma, requestContextService);
+  }
 
   async createOne(input: SoundFileCreateInput): Promise<SoundFile> {
     const { userId, fileName, fileSize, duration, filePath, previewLink } =
       input;
-    const newOne = await this.prisma.soundFile.create({
+    const tx = this.db();
+    const newOne = await tx.soundFile.create({
       data: {
         userId,
         fileName,
@@ -32,14 +41,14 @@ export class SoundFileRepositoryMysql implements SoundFileRepository {
   }
 
   async findOneById(id: Id): Promise<SoundFile | null> {
-    const soundFile = await this.prisma.soundFile.findUnique({
+    const soundFile = await this.db().soundFile.findUnique({
       where: { id },
     });
     return soundFile ? this.mapper.mapRawToEntity(soundFile) : null;
   }
 
   async deleteOne(id: Id): Promise<void> {
-    await this.prisma.soundFile.update({
+    await this.db().soundFile.update({
       where: { id },
       data: {
         // soft delete

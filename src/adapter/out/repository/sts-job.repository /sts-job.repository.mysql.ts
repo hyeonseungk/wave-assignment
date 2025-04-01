@@ -5,15 +5,23 @@ import {
   StsJobCreateInput,
 } from '../../../../domain/entity/sts-job.entity';
 import { Id } from '../../../../domain/entity/type';
+import { RequestContextService } from '../../../common/context/request-context.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { RepositoryMySql } from '../prisma/repository.mysql';
 import { StsJobMapper } from './sts-job.mapper';
 
 @Injectable()
-export class StsJobRepositoryMysql implements StsJobRepository {
+export class StsJobRepositoryMysql
+  extends RepositoryMySql
+  implements StsJobRepository
+{
   constructor(
-    private readonly prisma: PrismaService,
+    prisma: PrismaService,
+    requestContextService: RequestContextService,
     private readonly mapper: StsJobMapper,
-  ) {}
+  ) {
+    super(prisma, requestContextService);
+  }
 
   async createOne(input: StsJobCreateInput): Promise<StsJob> {
     const {
@@ -27,7 +35,7 @@ export class StsJobRepositoryMysql implements StsJobRepository {
       resultFileDuration,
       resultFilePreviewLink,
     } = input;
-    const newOne = await this.prisma.stsJob.create({
+    const newOne = await this.db().stsJob.create({
       data: {
         userId,
         soundFileId,
@@ -44,7 +52,7 @@ export class StsJobRepositoryMysql implements StsJobRepository {
   }
 
   async findOneById(id: Id): Promise<StsJob | null> {
-    const stsJob = await this.prisma.stsJob.findUnique({
+    const stsJob = await this.db().stsJob.findUnique({
       where: { id },
     });
     return stsJob ? this.mapper.mapRawToEntity(stsJob) : null;
