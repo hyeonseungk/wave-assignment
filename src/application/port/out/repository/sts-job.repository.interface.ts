@@ -5,6 +5,6 @@ import {
 import { Id } from '../../../../domain/entity/type';
 
 export interface StsJobRepository {
-  createOne(input: StsJobCreateInput): Promise<void>;
+  createOne(input: StsJobCreateInput): Promise<StsJob>;
   findOneById(id: Id): Promise<StsJob | null>;
 }

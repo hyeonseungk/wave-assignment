@@ -15,7 +15,7 @@ export class StsJobRepositoryMysql implements StsJobRepository {
     private readonly mapper: StsJobMapper,
   ) {}
 
-  async createOne(input: StsJobCreateInput): Promise<void> {
+  async createOne(input: StsJobCreateInput): Promise<StsJob> {
     const {
       userId,
       soundFileId,
@@ -27,7 +27,7 @@ export class StsJobRepositoryMysql implements StsJobRepository {
       resultFileDuration,
       resultFilePreviewLink,
     } = input;
-    await this.prisma.stsJob.create({
+    const newOne = await this.prisma.stsJob.create({
       data: {
         userId,
         soundFileId,
@@ -40,6 +40,7 @@ export class StsJobRepositoryMysql implements StsJobRepository {
         resultFilePreviewLink,
       },
     });
+    return this.mapper.mapRawToEntity(newOne);
   }
 
   async findOneById(id: Id): Promise<StsJob | null> {

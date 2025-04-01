@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '../../common/config/config.module';
+import { PreviewLinkGeneratorAwsS3 } from './etc/preview-link-generator/preview-link-generator.aws-s3';
 import { PrismaModule } from './repository/prisma/prisma.module';
 import { SoundFileMapper } from './repository/sound-file.repository/sound-file.mapper';
 import { SoundFileRepositoryMysql } from './repository/sound-file.repository/sound-file.repository.mysql';
@@ -15,6 +16,7 @@ export enum OutAdapter {
   SoundFileRepository = 'SoundFileRepository',
   VoiceRepository = 'VoiceRepository',
   StsJobRepository = 'StsJobRepository',
+  PreviewLinkGenerator = 'PreviewLinkGenerator',
 }
 
 @Module({
@@ -40,6 +42,10 @@ export enum OutAdapter {
       useClass: StsJobRepositoryMysql,
     },
     StsJobMapper,
+    {
+      provide: OutAdapter.PreviewLinkGenerator,
+      useClass: PreviewLinkGeneratorAwsS3,
+    },
   ],
   exports: Object.values(OutAdapter).filter(
     (value) => typeof value === 'string',

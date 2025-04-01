@@ -15,15 +15,16 @@ export class VoiceRepositoryMysql implements VoiceRepository {
     private readonly mapper: VoiceMapper,
   ) {}
 
-  async createOne(input: VoiceCreateInput): Promise<void> {
+  async createOne(input: VoiceCreateInput): Promise<Voice> {
     const { name, explanation, link } = input;
-    await this.prisma.voice.create({
+    const newOne = await this.prisma.voice.create({
       data: {
         name,
         explanation,
         link,
       },
     });
+    return this.mapper.mapRawToEntity(newOne);
   }
 
   async findOneById(id: Id): Promise<Voice | null> {

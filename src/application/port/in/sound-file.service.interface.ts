@@ -1,3 +1,4 @@
+import { SoundFile } from '../../../domain/entity/sound-file.entity';
 import { Id } from '../../../domain/entity/type';
 
 export interface SoundFileSvc {
@@ -15,9 +16,13 @@ export class SoundFileUploadCommand {
 }
 
 export class SoundFileUploadResult {
-  constructor(
-    public readonly fileId: Id,
-    public readonly filePreviewUrl: string,
-    public readonly uploadTime: string,
-  ) {}
+  public readonly fileId: Id;
+  public readonly filePreviewUrl: string;
+  public readonly uploadTime: string;
+  constructor(soundFile: SoundFile) {
+    const { id, previewLink, createdAt } = soundFile.toDTO();
+    this.fileId = id;
+    this.filePreviewUrl = previewLink;
+    this.uploadTime = createdAt.toISOString();
+  }
 }

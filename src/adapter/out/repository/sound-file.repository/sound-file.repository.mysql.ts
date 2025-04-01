@@ -15,10 +15,10 @@ export class SoundFileRepositoryMysql implements SoundFileRepository {
     private readonly mapper: SoundFileMapper,
   ) {}
 
-  async createOne(input: SoundFileCreateInput): Promise<void> {
+  async createOne(input: SoundFileCreateInput): Promise<SoundFile> {
     const { userId, fileName, fileSize, duration, filePath, previewLink } =
       input;
-    await this.prisma.soundFile.create({
+    const newOne = await this.prisma.soundFile.create({
       data: {
         userId,
         fileName,
@@ -28,6 +28,7 @@ export class SoundFileRepositoryMysql implements SoundFileRepository {
         previewLink,
       },
     });
+    return this.mapper.mapRawToEntity(newOne);
   }
 
   async findOneById(id: Id): Promise<SoundFile | null> {

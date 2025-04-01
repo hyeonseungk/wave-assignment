@@ -5,6 +5,6 @@ import {
 } from '../../../../domain/entity/voice.entity';
 
 export interface VoiceRepository {
-  createOne(input: VoiceCreateInput): Promise<void>;
+  createOne(input: VoiceCreateInput): Promise<Voice>;
   findOneById(id: Id): Promise<Voice | null>;
 }

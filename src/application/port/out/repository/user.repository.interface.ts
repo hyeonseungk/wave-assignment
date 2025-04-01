@@ -2,7 +2,7 @@ import { Id } from '../../../../domain/entity/type';
 import { User, UserCreateInput } from '../../../../domain/entity/user.entity';
 
 export interface UserRepository {
-  createOne(input: UserCreateInput): Promise<void>;
+  createOne(input: UserCreateInput): Promise<User>;
   findOneById(id: Id): Promise<User | null>;
   findOneByEmail(email: string): Promise<User | null>;
 

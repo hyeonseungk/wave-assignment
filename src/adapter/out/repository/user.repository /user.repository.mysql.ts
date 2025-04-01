@@ -12,9 +12,9 @@ export class UserRepositoryMysql implements UserRepository {
     private readonly mapper: UserMapper,
   ) {}
 
-  async createOne(input: UserCreateInput): Promise<void> {
+  async createOne(input: UserCreateInput): Promise<User> {
     const { email, password, nickname, grade } = input;
-    await this.prisma.user.create({
+    const newOne = await this.prisma.user.create({
       data: {
         email,
         password,
@@ -22,6 +22,7 @@ export class UserRepositoryMysql implements UserRepository {
         grade,
       },
     });
+    return this.mapper.mapRawToEntity(newOne);
   }
 
   async findOneById(id: Id): Promise<User> {
