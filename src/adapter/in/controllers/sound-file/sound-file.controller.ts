@@ -10,6 +10,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApplicationService } from '../../../../application/applicatioin.module';
 import {
+  SoundFileDeleteCommand,
   SoundFileSvc,
   SoundFileUploadCommand,
 } from '../../../../application/port/in/sound-file.service.interface';
@@ -19,7 +20,10 @@ import { UserId } from '../../../common/decorator/user-id.decorator';
 import { AccessControl } from '../../../common/guards/access-guard';
 import { UserLevel } from '../../../common/guards/type';
 import { StatusCode } from '../../../common/type/status-code';
-import { SoundUploadRequestBody } from './dto/sound-file-upload.request.body';
+import {
+  SoundFileDeleteRequestBody,
+  SoundFileUploadRequestBody,
+} from './dto/sound-file-upload.request.body';
 
 @Controller('/api/v1')
 @AccessControl(UserLevel.MEMBER)
@@ -29,7 +33,7 @@ export class SoundFileController {
     private readonly soundFileService: SoundFileSvc,
   ) {}
 
-  @Post('/common/upload/audio')
+  @Post('/common/audio/upload')
   @UseInterceptors(FileInterceptor('soundFile'))
   async uploadSound(
     @UserId() userId: Id,
@@ -42,7 +46,7 @@ export class SoundFileController {
         .build({ errorHttpStatusCode: StatusCode.BAD_REQUEST as number }),
     )
     soundFile: Express.Multer.File,
-    @Body() body: SoundUploadRequestBody,
+    @Body() body: SoundFileUploadRequestBody,
   ) {
     const { fileName, fileSize, duration } = body;
     const command = new SoundFileUploadCommand(
@@ -54,5 +58,12 @@ export class SoundFileController {
     );
     const result = await this.soundFileService.upload(command);
     return result;
+  }
+
+  @Post('/common/audio/delete')
+  async login(@UserId() userId: Id, @Body() body: SoundFileDeleteRequestBody) {
+    const { fileId } = body;
+    const command = new SoundFileDeleteCommand(userId, fileId);
+    return await this.soundFileService.delete(command);
   }
 }

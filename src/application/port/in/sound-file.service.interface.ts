@@ -3,6 +3,7 @@ import { Id } from '../../../domain/entity/type';
 
 export interface SoundFileSvc {
   upload(command: SoundFileUploadCommand): Promise<SoundFileUploadResult>;
+  delete(command: SoundFileDeleteCommand): Promise<void>;
 }
 
 export class SoundFileUploadCommand {
@@ -25,4 +26,11 @@ export class SoundFileUploadResult {
     this.filePreviewUrl = previewLink;
     this.uploadTime = createdAt.toISOString();
   }
+}
+
+export class SoundFileDeleteCommand {
+  constructor(
+    public readonly userId: Id,
+    public readonly fileId: Id,
+  ) {}
 }

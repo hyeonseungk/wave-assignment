@@ -3,7 +3,10 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { OutAdapter } from '../../adapter/out/out.adapter.module';
 
+import { BadRequestError } from '../../common/error/custom-error';
+import { ErrorMsg } from '../../common/error/error-message';
 import {
+  SoundFileDeleteCommand,
   SoundFileSvc,
   SoundFileUploadCommand,
   SoundFileUploadResult,
@@ -45,8 +48,25 @@ export class SoundFileService implements SoundFileSvc {
     return new SoundFileUploadResult(newSoundFile);
   }
 
+  async delete(command: SoundFileDeleteCommand): Promise<void> {
+    const { fileId, userId } = command;
+    const soundFile = await this.soundFileRepository.findOneById(fileId);
+    if (!soundFile) {
+      throw new BadRequestError(
+        ErrorMsg.SOUND_FILE_DELETION_NOT_ALLOWED_NOT_EXIST,
+      );
+    }
+    if (!soundFile.isDeletionAllowedBy(userId)) {
+      throw new BadRequestError(
+        ErrorMsg.SOUND_FILE_DELETION_NOT_ALLOWED_NO_PERMISSION,
+      );
+    }
+    await this.deleteSoundFile(soundFile.getFilePath());
+    await this.soundFileRepository.deleteOne(fileId);
+  }
+
   private generateFileName(originalFileName: string) {
-    return `${originalFileName}-${Date.now()}`;
+    return `${Date.now()}-${originalFileName}`;
   }
 
   private async saveSoundFile(
@@ -58,8 +78,7 @@ export class SoundFileService implements SoundFileSvc {
     return filePath;
   }
 
-  private async deleteSoundFile(fileName: string): Promise<void> {
-    const filePath = path.join(this.uploadDirPath, fileName);
+  private async deleteSoundFile(filePath: string): Promise<void> {
     await fs.unlink(filePath);
   }
 }

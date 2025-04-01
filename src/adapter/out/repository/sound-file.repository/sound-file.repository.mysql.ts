@@ -37,4 +37,14 @@ export class SoundFileRepositoryMysql implements SoundFileRepository {
     });
     return soundFile ? this.mapper.mapRawToEntity(soundFile) : null;
   }
+
+  async deleteOne(id: Id): Promise<void> {
+    await this.prisma.soundFile.update({
+      where: { id },
+      data: {
+        // soft delete
+        deletedAt: new Date(),
+      },
+    });
+  }
 }

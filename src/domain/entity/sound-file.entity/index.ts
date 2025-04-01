@@ -27,6 +27,14 @@ export class SoundFile extends Entity {
       createdAt: this.createdAt,
     };
   }
+
+  isDeletionAllowedBy(userId: number) {
+    return this.userId === userId;
+  }
+
+  getFilePath() {
+    return this.filePath;
+  }
 }
 
 export type SoundFileCreateInput = {
