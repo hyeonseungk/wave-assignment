@@ -4,10 +4,12 @@ import { OutAdpaterModule } from '../adapter/out/out.adapter.module';
 import { ConfigModule } from '../common/config/config.module';
 import { LoginService } from './service/login.service';
 import { SoundFileService } from './service/sound-file.service';
+import { StsJobService } from './service/sts-job.service';
 
 export enum ApplicationService {
   SoundFileSvc = 'SoundFileSvc',
   LoginSvc = 'LoginSvc',
+  StsJobSvc = 'StsJobSvc',
 }
 
 @Module({
@@ -20,6 +22,10 @@ export enum ApplicationService {
     {
       provide: ApplicationService.LoginSvc,
       useClass: LoginService,
+    },
+    {
+      provide: ApplicationService.StsJobSvc,
+      useClass: StsJobService,
     },
   ],
   exports: Object.values(ApplicationService).filter(

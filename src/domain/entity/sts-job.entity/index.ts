@@ -9,6 +9,7 @@ export class StsJob extends Entity {
     private readonly soundFileId: Id,
     private readonly voiceId: Id,
     private readonly pitch: number,
+    private readonly soundQuality: number,
     private readonly status: StsJobStatus,
     private readonly createdAt: Date,
     private readonly resultFilePath: string,
@@ -26,6 +27,7 @@ export class StsJob extends Entity {
       soundFileId: this.soundFileId,
       voiceId: this.voiceId,
       pitch: this.pitch,
+      soundQuality: this.soundQuality,
       status: this.status,
       createdAt: this.createdAt,
       resultFilePath: this.resultFilePath,
@@ -41,6 +43,7 @@ export type StsJobCreateInput = {
   soundFileId: Id;
   voiceId: Id;
   pitch: number;
+  soundQuality: number;
   status: StsJobStatus;
   resultFilePath: string;
   resultFileSize: number;

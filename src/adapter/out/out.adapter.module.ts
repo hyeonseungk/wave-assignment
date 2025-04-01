@@ -18,6 +18,7 @@ export enum OutAdapter {
   VoiceRepository = 'VoiceRepository',
   StsJobRepository = 'StsJobRepository',
   PreviewLinkGenerator = 'PreviewLinkGenerator',
+  StsJobProcessor = 'StsJobProcessor',
 }
 
 @Module({
@@ -46,6 +47,10 @@ export enum OutAdapter {
     {
       provide: OutAdapter.PreviewLinkGenerator,
       useClass: PreviewLinkGeneratorAwsS3,
+    },
+    {
+      provide: OutAdapter.StsJobProcessor,
+      useClass: StsJobProcessor,
     },
   ],
   exports: Object.values(OutAdapter).filter(

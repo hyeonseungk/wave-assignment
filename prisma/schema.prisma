@@ -71,6 +71,7 @@ model StsJob {
   updatedAt   DateTime?    @updatedAt
   deletedAt   DateTime?
   pitch       Int
+  soundQuality  Int
   resultFilePath  String
   resultFileSize  Int
   resultFileDuration  Int

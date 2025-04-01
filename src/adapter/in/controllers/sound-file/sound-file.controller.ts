@@ -21,10 +21,8 @@ import { AccessControl } from '../../../common/guards/access-guard';
 import { UserLevel } from '../../../common/guards/type';
 import { DbTransactionInterceptor } from '../../../common/interceptors/db-transaction.interceptor';
 import { StatusCode } from '../../../common/type/status-code';
-import {
-  SoundFileDeleteRequestBody,
-  SoundFileUploadRequestBody,
-} from './dto/sound-file-upload.request.body';
+import { SoundFileDeleteRequestBody } from './dto/sound-file-delete.request.body';
+import { SoundFileUploadRequestBody } from './dto/sound-file-upload.request.body';
 
 @Controller('/api/v1')
 @AccessControl(UserLevel.MEMBER)
@@ -64,7 +62,7 @@ export class SoundFileController {
 
   @Post('/common/audio/delete')
   @UseInterceptors(DbTransactionInterceptor)
-  async login(@UserId() userId: Id, @Body() body: SoundFileDeleteRequestBody) {
+  async delete(@UserId() userId: Id, @Body() body: SoundFileDeleteRequestBody) {
     const { fileId } = body;
     const command = new SoundFileDeleteCommand(userId, fileId);
     return await this.soundFileService.delete(command);
